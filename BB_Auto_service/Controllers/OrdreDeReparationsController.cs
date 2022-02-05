@@ -245,7 +245,7 @@ namespace BB_Auto_service.Controllers
 
             //update Client solde
             Client client = await _context.Client.FindAsync(ordreDeReparation.Client);
-            client.Solde -= ordreDeReparation.TotalTtc;
+            client.Solde += ordreDeReparation.TotalTtc;
             _context.Entry(client).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 

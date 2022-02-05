@@ -483,7 +483,7 @@ namespace Gateway.Controllers
         }
         [HttpPost]
         [Route("RecoverPassword")]
-        [Authorize]
+        [Authorize (Roles = "ADMIN ORGANISME")]
         //POST : /api/Account/RecoverPassword
         public async Task<IActionResult> RecoverPassword(string userName)
         {
@@ -503,13 +503,13 @@ namespace Gateway.Controllers
                 return BadRequest("Utilisateur introuvable!");
 
             // compute the new hash string
-            var newPassword = RandomPassword();
+            var newPassword = "Stvcqjvd123+";
             var newPasswordHash = _userManager.PasswordHasher.HashPassword(user, newPassword);
             user.PasswordHash = newPasswordHash;
             var res = await _userManager.UpdateAsync(user);
-            var message = "<div style=''>Bonjour <strong>" + user.UserName + "</strong>," + " <p> Bienvenue sur la plateforme MSS Intranet , votre mot de passe a été changé.</p> <p> Votre nom d'utilisateur est : <strong>" + user.UserName + " </strong><br> Votre nouveau mot de passe  est : <strong>" + newPassword + "</strong></p>" + " <p><a href='" + _appSettings.UrlLogin + "'>Cliquez ici pour login</a>.</p></div>";
-            var subject = "Récupération mot de passe";
-            SendEmail(user.Email, message, subject);
+            //var message = "<div style=''>Bonjour <strong>" + user.UserName + "</strong>," + " <p> Bienvenue sur la plateforme MSS Intranet , votre mot de passe a été changé.</p> <p> Votre nom d'utilisateur est : <strong>" + user.UserName + " </strong><br> Votre nouveau mot de passe  est : <strong>" + newPassword + "</strong></p>" + " <p><a href='" + _appSettings.UrlLogin + "'>Cliquez ici pour login</a>.</p></div>";
+            //var subject = "Récupération mot de passe";
+            //SendEmail(user.Email, message, subject);
             return Ok(res);
 
         }

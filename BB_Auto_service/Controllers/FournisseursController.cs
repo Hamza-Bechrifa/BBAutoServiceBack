@@ -57,7 +57,7 @@ namespace BB_Auto_service.Controllers
             }
 
             _context.Entry(fournisseur).State = EntityState.Modified;
-
+            _context.Entry(fournisseur).Property(x => x.Solde).IsModified = false;
             try
             {
                 await _context.SaveChangesAsync();
@@ -127,7 +127,7 @@ namespace BB_Auto_service.Controllers
             string connString = _config["ConnectionStrings:bbAutoServiceConnection"];
             string query = "select dateDocument as date, id, totalTtc, 'BR' as TypeDocument "
                     + " from BonDeReception where fournisseur = " + id
-                    + " union select dateOperation as date, id, montant, 'RF' as TypeDocument"
+                    + " union select dateReglement as date, id, montant, 'RF' as TypeDocument"
                     + " from ReglementFournisseur where fournisseur = " + id
                     + "order by date";
             SqlConnection conn = new SqlConnection(connString);

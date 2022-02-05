@@ -167,7 +167,8 @@ namespace BB_Auto_service.Controllers
             _context.Entry(bonDeReception).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             updateFournisseurSolde((int)bonDeReceptionDTO.Fournisseur, bonDeReception.TotalTtc* -1);
-            return CreatedAtAction("GetBonDeReception", new { id = bonDeReception.Id });
+            bonDeReception.FournisseurNavigation = null;
+            return Ok(bonDeReception);
         }
 
         // DELETE: api/BonDeReceptions/5

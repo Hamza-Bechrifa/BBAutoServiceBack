@@ -57,7 +57,7 @@ namespace BB_Auto_service.Controllers
             }
 
             _context.Entry(client).State = EntityState.Modified;
-
+            _context.Entry(client).Property(x => x.Solde).IsModified = false;
             try
             {
                 await _context.SaveChangesAsync();

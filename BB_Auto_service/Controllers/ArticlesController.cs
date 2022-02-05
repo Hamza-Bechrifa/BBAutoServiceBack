@@ -53,6 +53,7 @@ namespace BB_Auto_service.Controllers
             }
 
             _context.Entry(article).State = EntityState.Modified;
+            _context.Entry(article).Property(x => x.StockReel).IsModified = false;
 
             try
             {
