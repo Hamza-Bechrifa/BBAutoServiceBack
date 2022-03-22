@@ -16,6 +16,8 @@ namespace BB_Auto_service.BBAutoServiceModels
         public string Telephone { get; set; }
         public string Adresse { get; set; }
         public double? Solde { get; set; }
+        public string CodeWinsoft { get; set; }
+        public double? Marge { get; set; }
 
         public virtual ICollection<BonDeReception> BonDeReception { get; set; }
     }

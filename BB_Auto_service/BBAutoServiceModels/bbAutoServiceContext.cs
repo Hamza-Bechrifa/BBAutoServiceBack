@@ -34,7 +34,7 @@ namespace BB_Auto_service.BBAutoServiceModels
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=TEC-HAMZAB\\SQLEXPRESS;Database=bbAutoService;Trusted_Connection=True;MultipleActiveResultSets=true");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-VG82GI2\\SQLEXPRESS;Database=bbAutoService;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
         }
 
@@ -44,15 +44,10 @@ namespace BB_Auto_service.BBAutoServiceModels
 
             modelBuilder.Entity<Article>(entity =>
             {
-                entity.HasIndex(e => e.Reference)
-                    .HasName("referenceUnique")
-                    .IsUnique();
-
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Designation)
                     .HasColumnName("designation")
-                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Emplacement)
@@ -76,7 +71,6 @@ namespace BB_Auto_service.BBAutoServiceModels
                 entity.Property(e => e.Reference)
                     .IsRequired()
                     .HasColumnName("reference")
-                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.ReferenceOrigine)
@@ -129,6 +123,8 @@ namespace BB_Auto_service.BBAutoServiceModels
 
                 entity.Property(e => e.Fournisseur).HasColumnName("fournisseur");
 
+                entity.Property(e => e.NumBlwinsoft).HasColumnName("NumBLWinsoft");
+
                 entity.Property(e => e.TotalHt).HasColumnName("totalHT");
 
                 entity.Property(e => e.TotalTtc).HasColumnName("totalTTC");
@@ -145,17 +141,18 @@ namespace BB_Auto_service.BBAutoServiceModels
 
                 entity.Property(e => e.Adresse)
                     .HasColumnName("adresse")
-                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Cin)
                     .HasColumnName("cin")
-                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CodeExterne)
+                    .HasColumnName("codeExterne")
                     .IsUnicode(false);
 
                 entity.Property(e => e.NomPrenom)
                     .HasColumnName("nomPrenom")
-                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Plafond).HasColumnName("plafond");
@@ -164,7 +161,6 @@ namespace BB_Auto_service.BBAutoServiceModels
 
                 entity.Property(e => e.Telephone)
                     .HasColumnName("telephone")
-                    .HasMaxLength(50)
                     .IsUnicode(false);
             });
 
@@ -287,6 +283,13 @@ namespace BB_Auto_service.BBAutoServiceModels
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.CodeWinsoft)
+                    .HasColumnName("codeWinsoft")
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Marge).HasColumnName("marge");
+
                 entity.Property(e => e.MatriculeFiscale)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -325,6 +328,8 @@ namespace BB_Auto_service.BBAutoServiceModels
                     .IsUnicode(false);
 
                 entity.Property(e => e.Kilometrage).HasColumnName("kilometrage");
+
+                entity.Property(e => e.NumBs).HasColumnName("numBs");
 
                 entity.Property(e => e.ResteApaye).HasColumnName("resteAPaye");
 
@@ -405,6 +410,11 @@ namespace BB_Auto_service.BBAutoServiceModels
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Client).HasColumnName("client");
+
+                entity.Property(e => e.Contact)
+                    .HasColumnName("contact")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.DateMiseEnCirculation)
                     .HasColumnName("dateMiseEnCirculation")

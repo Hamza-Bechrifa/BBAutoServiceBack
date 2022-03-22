@@ -25,8 +25,6 @@ namespace BB_Auto_service.Controllers
             _config = config;
             _context = context;
         }
-
-        // GET: api/OrdreDeReparations
         [HttpGet]
         public async Task<ActionResult<DataTable>> GetOrdreDeReparation()
         {
@@ -39,6 +37,43 @@ namespace BB_Auto_service.Controllers
                 "FROM OrdreDeReparation ors " +
                 "LEFT JOIN Client cli on   ors.client = cli.id " +
                 "LEFT JOIN Voiture voiture ON ORS.voiture = VOITURE.id";
+
+            SqlConnection conn = new SqlConnection(connString);
+            SqlCommand cmd = new SqlCommand(query, conn);
+            conn.Open();
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+
+            da.Fill(dataTable);
+            conn.Close();
+            da.Dispose();
+
+            //    var x = await _context.OrdreDeReparation.Include(c=>c.Client).ToListAsync();
+            return dataTable;
+        }
+
+
+
+        // GET: api/OrdreDeReparations
+        [HttpPost("list")]
+        public async Task<ActionResult<DataTable>> GetOrdreDeReparation(FiltresDTO filtres)
+        {
+            if (string.IsNullOrEmpty(filtres.DateDebut))
+                filtres.DateDebut = "0000-00-00";
+         
+            if (string.IsNullOrEmpty(filtres.DateFin))
+                filtres.DateFin = "9999-99-99";
+
+
+            DataTable dataTable = new DataTable();
+            string connString = _config["ConnectionStrings:bbAutoServiceConnection"];//"Server=TEC-HAMZAB\\SQLExpress;DataBase=bbAutoService;User Id =MssUsr; Password=abc.123";
+
+            string query = "" +
+                "SELECT ors.id,cli.nomPrenom client,voiture.matricule voiture,dateDocument,dateCreation, ors.kilometrage, totalHt, totalTtc, resteAPaye " +
+                "FROM OrdreDeReparation ors "+
+                "LEFT JOIN Client cli on   ors.client = cli.id " +
+                "LEFT JOIN Voiture voiture ON ORS.voiture = VOITURE.id " +
+                "where SUBSTRING (ors.dateCreation,1,10) between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "' ";
 
             SqlConnection conn = new SqlConnection(connString);
             SqlCommand cmd = new SqlCommand(query, conn);
@@ -178,6 +213,11 @@ namespace BB_Auto_service.Controllers
                 _context.Entry(NewClient).State = EntityState.Modified;
                 _context.SaveChanges();
             }
+            //update kilometrage voiture 
+            Voiture voiture = _context.Voiture.Find(ordreDeReparation.Voiture);
+            if (voiture != null && ordreDeReparation.Kilometrage > voiture?.Kilometrage)
+                voiture.Kilometrage = ordreDeReparation.Kilometrage;
+
             return NoContent();
         }
 

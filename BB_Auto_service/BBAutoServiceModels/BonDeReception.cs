@@ -14,6 +14,7 @@ namespace BB_Auto_service.BBAutoServiceModels
         public string CommentaireExterne { get; set; }
         public double TotalHt { get; set; }
         public double TotalTtc { get; set; }
+        public double? NumBlwinsoft { get; set; }
 
         public virtual Fournisseur FournisseurNavigation { get; set; }
     }

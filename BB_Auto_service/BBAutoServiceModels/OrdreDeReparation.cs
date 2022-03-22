@@ -16,6 +16,7 @@ namespace BB_Auto_service.BBAutoServiceModels
         public double TotalHt { get; set; }
         public double TotalTtc { get; set; }
         public double ResteApaye { get; set; }
+        public double? NumBs { get; set; }
 
         public virtual Client ClientNavigation { get; set; }
     }

@@ -17,6 +17,7 @@ namespace BB_Auto_service.BBAutoServiceModels
         public string Adresse { get; set; }
         public double? Solde { get; set; }
         public double? Plafond { get; set; }
+        public string CodeExterne { get; set; }
 
         public virtual ICollection<OrdreDeReparation> OrdreDeReparation { get; set; }
     }

@@ -1,0 +1,1 @@
+﻿Scaffold-DbContext "Server=DESKTOP-VG82GI2\SQLEXPRESS;Database=bbAutoService;Trusted_Connection=True;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir BBAutoServiceModels -force

@@ -71,9 +71,9 @@ namespace Gateway.Controllers
             {
                 try
                 {
-                    model.Password = RandomPassword();//GenerateRandomPassword();
+                    model.Password = "Azerty123+";//RandomPassword();
                     var result = await _userManager.CreateAsync(applicationUser, model.Password);
-
+                    #region not used for the moment
 
                     if (result.Succeeded)
                     {
@@ -96,7 +96,7 @@ namespace Gateway.Controllers
                                         Id = orgId,
                                         OrganismTypeId = model.Type
                                     };
-                                   
+
                                     _context.Organization.Add(org);
                                 }
                             }
@@ -118,27 +118,27 @@ namespace Gateway.Controllers
                         // send confirmation email
                         //1- confirmation link
                         //send mail username & password
-                        var url = "";
-                        if (model.Role == "MERCHANT" || model.Role == "MAGASIN")
-                            url = _appSettings.UrlLoginMerchant;
-                        else
-                            url = _appSettings.UrlLogin;
-                        var message = "<div style=''>Bonjour <strong>" + applicationUser.UserName + "</strong>," + " <p> Bienvenue sur la plateforme Gateway Solutions , un compte associé à votre adresse mail a été crée.</p> <p> Votre nom d'utilisateur est : <strong>" + applicationUser.UserName + " </strong><br> Votre mot de passe est : <strong>" + model.Password + "</strong></p>" + " <p><a href='" + url + "'>Cliquez ici pour login</a>.</p></div>";
-                        var subject = "Activation de votre compte ";
-                        try
-                        {
-                            SendEmail(applicationUser.Email, message, subject);
+                        //var url = "";
+                        //if (model.Role == "MERCHANT" || model.Role == "MAGASIN")
+                        //    url = _appSettings.UrlLoginMerchant;
+                        //else
+                        //    url = _appSettings.UrlLogin;
+                        //var message = "<div style=''>Bonjour <strong>" + applicationUser.UserName + "</strong>," + " <p> Bienvenue sur la plateforme Gateway Solutions , un compte associé à votre adresse mail a été crée.</p> <p> Votre nom d'utilisateur est : <strong>" + applicationUser.UserName + " </strong><br> Votre mot de passe est : <strong>" + model.Password + "</strong></p>" + " <p><a href='" + url + "'>Cliquez ici pour login</a>.</p></div>";
+                        //var subject = "Activation de votre compte ";
+                        //try
+                        //{
+                        //    SendEmail(applicationUser.Email, message, subject);
 
-                            trans.Commit();
+                        //    trans.Commit();
 
-                        }
-                        catch (Exception ex)
-                        {
-                            List<string> errors = new List<string>();
+                        //}
+                        //catch (Exception ex)
+                        //{
+                        //    List<string> errors = new List<string>();
 
-                            errors.Add("L'envoi d'emails n'est pas possible");
-                            return BadRequest(new JsonResult(errors));
-                        }
+                        //    errors.Add("L'envoi d'emails n'est pas possible");
+                        //    return BadRequest(new JsonResult(errors));
+                        //}
                         // end send mail
                         return Ok(new { username = applicationUser.UserName, email = applicationUser.Email, status = 1, message = " Registration Successfull" });
                     }
@@ -152,8 +152,8 @@ namespace Gateway.Controllers
                         }
                         return BadRequest(new JsonResult(errors));
                     }
-
-                    //return Ok(result);
+                    #endregion
+                    return Ok(result);
                 }
                 catch (Exception ex)
                 {
@@ -483,7 +483,7 @@ namespace Gateway.Controllers
         }
         [HttpPost]
         [Route("RecoverPassword")]
-        [Authorize (Roles = "ADMIN ORGANISME")]
+        [Authorize (Roles = "ADMIN")]
         //POST : /api/Account/RecoverPassword
         public async Task<IActionResult> RecoverPassword(string userName)
         {

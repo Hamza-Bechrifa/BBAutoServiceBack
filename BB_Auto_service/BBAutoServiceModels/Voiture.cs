@@ -13,5 +13,6 @@ namespace BB_Auto_service.BBAutoServiceModels
         public string Vin { get; set; }
         public int? Kilometrage { get; set; }
         public int? Client { get; set; }
+        public string Contact { get; set; }
     }
 }
