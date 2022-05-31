@@ -114,12 +114,23 @@ namespace BB_Auto_service.Controllers
             }
             double totalTTC = 0;
             double TotalHt = 0;
+
+            Fournisseur fournisseur = _context.Fournisseur.Find(bonDeReception.Fournisseur);
             foreach (var detailleBr in bonDeReceptionDTO.DetailleBR)
             {
 
                 detailleBr.BonDeReception = id;
                 Article article = await _context.Article.FindAsync(detailleBr.Article);
                 article.StockReel += detailleBr.Quantite;
+
+                if (article.PrixHt < detailleBr.PrixHt)
+                {
+                    article.PrixHt = detailleBr.PrixHt;
+                    article.PrixTtc = detailleBr.PrixHt * (1 + ((double)article.Tva / 100));
+                    article.Marge = fournisseur.Marge != null ? (double)fournisseur.Marge : article.Marge;
+                    article.PrixPublic = (article.PrixTtc + (article.PrixHt * (double)fournisseur?.Marge) / 100);
+                }
+
                 TotalHt += (double)detailleBr.PrixHt * (double)detailleBr.Quantite;
                 totalTTC += (double)detailleBr.TotalTtc;
                 _context.Entry(article).State = EntityState.Modified;

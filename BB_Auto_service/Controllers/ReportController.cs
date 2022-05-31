@@ -35,7 +35,9 @@ namespace BB_Auto_service.Controllers
 
             if (string.IsNullOrEmpty(filtres.DateFin))
                 filtres.DateFin = "9999-99-99";
-
+            
+            filtres.DateDebut += "T00:00:000";
+            filtres.DateFin += "T99:99:999";
 
             DataTable dataTable = new DataTable();
             string connString = _config["ConnectionStrings:bbAutoServiceConnection"];//"Server=TEC-HAMZAB\\SQLExpress;DataBase=bbAutoService;User Id =MssUsr; Password=abc.123";
@@ -68,7 +70,8 @@ namespace BB_Auto_service.Controllers
 
             if (string.IsNullOrEmpty(filtres.DateFin))
                 filtres.DateFin = "9999-99-99";
-
+            filtres.DateDebut += "T00:00:000";
+            filtres.DateFin += "T99:99:999";
 
             DataTable dataTable = new DataTable();
             string connString = _config["ConnectionStrings:bbAutoServiceConnection"];//"Server=TEC-HAMZAB\\SQLExpress;DataBase=bbAutoService;User Id =MssUsr; Password=abc.123";
@@ -101,7 +104,8 @@ namespace BB_Auto_service.Controllers
 
             if (string.IsNullOrEmpty(filtres.DateFin))
                 filtres.DateFin = "9999-99-99";
-
+            filtres.DateDebut += "T00:00:000";
+            filtres.DateFin += "T99:99:999";
 
             DataTable dataTable = new DataTable();
             string connString = _config["ConnectionStrings:bbAutoServiceConnection"];//"Server=TEC-HAMZAB\\SQLExpress;DataBase=bbAutoService;User Id =MssUsr; Password=abc.123";
@@ -133,23 +137,24 @@ namespace BB_Auto_service.Controllers
             if (string.IsNullOrEmpty(filtres.DateFin))
                 filtres.DateFin = "9999-99-99";
 
-
+            filtres.DateDebut += "T00:00:000";
+            filtres.DateFin += "T99:99:999";
             DataTable dataTable = new DataTable();
             string connString = _config["ConnectionStrings:bbAutoServiceConnection"];//"Server=TEC-HAMZAB\\SQLExpress;DataBase=bbAutoService;User Id =MssUsr; Password=abc.123";
 
             string query = "" +
                 "select * from ( " +
-                "SELECT *,(tab.[ttc achat] *(tab.[qte achat]- tab.[qte vente]))as col1 from ( " +
+                "SELECT *,(tab.[ttc_achat] *(tab.[qte_achat]- tab.[qte_vente]))as col1 from ( " +
                 "select *  from( " +
                 "select a.id, a.reference, a.designation, " +
-                "ISNULL((select sum(quantite) from detailleBr dbr where article = a.id and dbr.bonDeReception in (select id from BonDeReception where dateCreation between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'qte achat',       " +
-                "ISNULL((select sum(quantite) from DetailleOr dor where article = a.id and dor.ordreDeReparation in (select id from OrdreDeReparation where dateCreation between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'qte vente', " +
-                "ISNULL((select sum(totalTtc) from detailleBr dbr where article = a.id and dbr.bonDeReception in (select id from BonDeReception where dateCreation between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'ttc achat',       " +
-                "ISNULL((select sum(totalTtc) from DetailleOr dor where article = a.id and dor.ordreDeReparation in (select id from OrdreDeReparation where dateCreation between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'ttc vente'  " +
+                "ISNULL((select sum(quantite) from detailleBr dbr where article = a.id and dbr.bonDeReception in (select id from BonDeReception where dateCreation between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'qte_achat',       " +
+                "ISNULL((select sum(quantite) from DetailleOr dor where article = a.id and dor.ordreDeReparation in (select id from OrdreDeReparation where dateCreation between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'qte_vente', " +
+                "ISNULL((select sum(totalTtc) from detailleBr dbr where article = a.id and dbr.bonDeReception in (select id from BonDeReception where dateCreation between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'ttc_achat',       " +
+                "ISNULL((select sum(totalTtc) from DetailleOr dor where article = a.id and dor.ordreDeReparation in (select id from OrdreDeReparation where dateCreation between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'ttc_vente'  " +
                 "from article a where type != 'true' ) " +
-                "req where req.[qte achat] is not null or req.[qte vente] is not null " +
+                "req where req.[qte_achat] is not null or req.[qte_vente] is not null " +
                 ") as tab " +
-                ") as tabb where tabb.[qte vente] - tabb.[qte achat] > 0 ";
+                ") as tabb where tabb.[qte_vente] - tabb.[qte_achat] > 0 ";
 
             SqlConnection conn = new SqlConnection(connString);
             SqlCommand cmd = new SqlCommand(query, conn);
@@ -176,6 +181,8 @@ namespace BB_Auto_service.Controllers
             if (string.IsNullOrEmpty(filtres.DateFin))
                 filtres.DateFin = "9999-99-99";
 
+            filtres.DateDebut += "T00:00:000";
+            filtres.DateFin += "T99:99:999";
 
             DataTable dataTable = new DataTable();
             string connString = _config["ConnectionStrings:bbAutoServiceConnection"];//"Server=TEC-HAMZAB\\SQLExpress;DataBase=bbAutoService;User Id =MssUsr; Password=abc.123";
@@ -183,12 +190,12 @@ namespace BB_Auto_service.Controllers
             string query = "" +
                 "select *  from(" +
                 "select a.id, a.reference, a.designation, " +
-                " ISNULL((select sum(quantite) from detailleBr dbr where article = a.id and dbr.bonDeReception in (select id from BonDeReception where dateCreation  between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'qte achat', " +
-                " ISNULL((select sum(quantite) from DetailleOr dor where article = a.id and dor.ordreDeReparation in (select id from OrdreDeReparation where dateCreation  between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'qte vente', " +
-                " ISNULL((select sum(totalTtc) from detailleBr dbr where article = a.id and dbr.bonDeReception in (select id from BonDeReception where dateCreation  between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'ttc achat', " +
-                " ISNULL((select sum(totalTtc) from DetailleOr dor where article = a.id and dor.ordreDeReparation in (select id from OrdreDeReparation where dateCreation  between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'ttc vente' " +
+                " ISNULL((select sum(quantite) from detailleBr dbr where article = a.id and dbr.bonDeReception in (select id from BonDeReception where dateCreation  between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'qte_achat', " +
+                " ISNULL((select sum(quantite) from DetailleOr dor where article = a.id and dor.ordreDeReparation in (select id from OrdreDeReparation where dateCreation  between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'qte_vente', " +
+                " ISNULL((select sum(totalTtc) from detailleBr dbr where article = a.id and dbr.bonDeReception in (select id from BonDeReception where dateCreation  between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'ttc_achat', " +
+                " ISNULL((select sum(totalTtc) from DetailleOr dor where article = a.id and dor.ordreDeReparation in (select id from OrdreDeReparation where dateCreation  between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'ttc_vente' " +
                 " from article a where type != 'true') " +
-                " req where req.[qte achat] is not null or req.[qte vente] is not null ";
+                " req where req.[qte_achat] is not null or req.[qte_vente] is not null ";
 
             SqlConnection conn = new SqlConnection(connString);
             SqlCommand cmd = new SqlCommand(query, conn);
@@ -215,23 +222,26 @@ namespace BB_Auto_service.Controllers
             if (string.IsNullOrEmpty(filtres.DateFin))
                 filtres.DateFin = "9999-99-99";
 
+            filtres.DateDebut += "T00:00:000";
+            filtres.DateFin += "T99:99:999";
 
             DataTable dataTable = new DataTable();
             string connString = _config["ConnectionStrings:bbAutoServiceConnection"];//"Server=TEC-HAMZAB\\SQLExpress;DataBase=bbAutoService;User Id =MssUsr; Password=abc.123";
 
             string query = "" +
                "select * from ( " +
-                "SELECT *,(tab.[ttc achat] *(tab.[qte achat]- tab.[qte vente]))as col1 from (  " +
+                "SELECT *,(tab.[ttc_achat] *(tab.[qte_achat]- tab.[qte_" +
+                "vente]))as col1 from (  " +
                 "select *  from(   " +
                 "select a.id, a.reference, a.designation, " +
-                "ISNULL((select sum(quantite) from detailleBr dbr where article = a.id and dbr.bonDeReception in (select id from BonDeReception where dateCreation between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'qte achat',       " +
-                "ISNULL((select sum(quantite) from DetailleOr dor where article = a.id and dor.ordreDeReparation in (select id from OrdreDeReparation where dateCreation between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'qte vente', " +
-                "ISNULL((select sum(totalTtc) from detailleBr dbr where article = a.id and dbr.bonDeReception in (select id from BonDeReception where dateCreation between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'ttc achat',       " +
-                "ISNULL((select sum(totalTtc) from DetailleOr dor where article = a.id and dor.ordreDeReparation in (select id from OrdreDeReparation where dateCreation between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'ttc vente'  " +
+                "ISNULL((select sum(quantite) from detailleBr dbr where article = a.id and dbr.bonDeReception in (select id from BonDeReception where dateCreation between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'qte_achat',       " +
+                "ISNULL((select sum(quantite) from DetailleOr dor where article = a.id and dor.ordreDeReparation in (select id from OrdreDeReparation where dateCreation between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'qte_vente', " +
+                "ISNULL((select sum(totalTtc) from detailleBr dbr where article = a.id and dbr.bonDeReception in (select id from BonDeReception where dateCreation between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'ttc_achat',       " +
+                "ISNULL((select sum(totalTtc) from DetailleOr dor where article = a.id and dor.ordreDeReparation in (select id from OrdreDeReparation where dateCreation between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "')),0) as 'ttc_vente'  " +
                 "from article a where type != 'true' ) " +
-                "req where req.[qte achat] is not null or req.[qte vente] is not null " +
+                "req where req.[qte_achat] is not null or req.[qte_vente] is not null " +
                 ") as tab " +
-                ") as tabb where tabb.[qte vente] - tabb.[qte achat] < 0 ";
+                ") as tabb where tabb.[qte_vente] - tabb.[qte_achat] < 0 ";
 
             SqlConnection conn = new SqlConnection(connString);
             SqlCommand cmd = new SqlCommand(query, conn);
@@ -247,7 +257,71 @@ namespace BB_Auto_service.Controllers
             return dataTable;
         }
 
+        [HttpPost("totalReglementClient")]
+        public async Task<ActionResult<DataTable>> TotalReglementClient(FiltresDTO filtres)
+        {
+            if (string.IsNullOrEmpty(filtres.DateDebut))
+                filtres.DateDebut = "0000-00-00";
 
+            if (string.IsNullOrEmpty(filtres.DateFin))
+                filtres.DateFin = "9999-99-99";
+
+            filtres.DateDebut += "T00:00:000";
+            filtres.DateFin += "T99:99:999";
+
+            DataTable dataTable = new DataTable();
+            string connString = _config["ConnectionStrings:bbAutoServiceConnection"];//"Server=TEC-HAMZAB\\SQLExpress;DataBase=bbAutoService;User Id =MssUsr; Password=abc.123";
+
+            string query = "" +
+                "select sum(montant) as 'totalReglementClient' from ReglementClient  where mode != 'remise' dateOperation " +
+                " between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "' ";
+
+            SqlConnection conn = new SqlConnection(connString);
+            SqlCommand cmd = new SqlCommand(query, conn);
+            conn.Open();
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+
+            da.Fill(dataTable);
+            conn.Close();
+            da.Dispose();
+
+            //    var x = await _context.OrdreDeReparation.Include(c=>c.Client).ToListAsync();
+            return dataTable;
+        }
+
+        [HttpPost("totalAchat")]
+        public async Task<ActionResult<DataTable>> TotalAchat(FiltresDTO filtres)
+        {
+            if (string.IsNullOrEmpty(filtres.DateDebut))
+                filtres.DateDebut = "0000-00-00";
+
+            if (string.IsNullOrEmpty(filtres.DateFin))
+                filtres.DateFin = "9999-99-99";
+
+            filtres.DateDebut += "T00:00:000";
+            filtres.DateFin += "T99:99:999";
+
+            DataTable dataTable = new DataTable();
+            string connString = _config["ConnectionStrings:bbAutoServiceConnection"];//"Server=TEC-HAMZAB\\SQLExpress;DataBase=bbAutoService;User Id =MssUsr; Password=abc.123";
+
+            string query = "" +
+                "select sum(totalTTC) as 'totalAchat' from BonDeReception  where dateCreation " +
+                " between '" + filtres.DateDebut + "' and '" + filtres.DateFin + "' ";
+
+            SqlConnection conn = new SqlConnection(connString);
+            SqlCommand cmd = new SqlCommand(query, conn);
+            conn.Open();
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+
+            da.Fill(dataTable);
+            conn.Close();
+            da.Dispose();
+
+            //    var x = await _context.OrdreDeReparation.Include(c=>c.Client).ToListAsync();
+            return dataTable;
+        }
 
     }
 }

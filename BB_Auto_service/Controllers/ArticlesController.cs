@@ -51,7 +51,8 @@ namespace BB_Auto_service.Controllers
             {
                 return BadRequest();
             }
-
+            if (String.IsNullOrEmpty(article.Type))
+                article.Type = "false";
             _context.Entry(article).State = EntityState.Modified;
             _context.Entry(article).Property(x => x.StockReel).IsModified = false;
 
@@ -86,6 +87,8 @@ namespace BB_Auto_service.Controllers
             {
                 return BadRequest("Réference déja existante");
             }
+            if (String.IsNullOrEmpty(article.Type)) 
+                article.Type = "false"; 
             _context.Article.Add(article);
             await _context.SaveChangesAsync();
 

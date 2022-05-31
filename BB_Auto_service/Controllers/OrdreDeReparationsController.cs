@@ -33,7 +33,7 @@ namespace BB_Auto_service.Controllers
             string connString = _config["ConnectionStrings:bbAutoServiceConnection"];//"Server=TEC-HAMZAB\\SQLExpress;DataBase=bbAutoService;User Id =MssUsr; Password=abc.123";
 
             string query = "" +
-                "SELECT ors.id,cli.nomPrenom client,voiture.matricule voiture,dateDocument,dateCreation, ors.kilometrage, totalHt, totalTtc, resteAPaye " +
+                "SELECT ors.id,cli.nomPrenom client,voiture.matricule voiture,dateDocument,dateCreation, ors.kilometrage, totalHt, totalTtc, cli.solde resteAPaye " +
                 "FROM OrdreDeReparation ors " +
                 "LEFT JOIN Client cli on   ors.client = cli.id " +
                 "LEFT JOIN Voiture voiture ON ORS.voiture = VOITURE.id";
@@ -69,7 +69,7 @@ namespace BB_Auto_service.Controllers
             string connString = _config["ConnectionStrings:bbAutoServiceConnection"];//"Server=TEC-HAMZAB\\SQLExpress;DataBase=bbAutoService;User Id =MssUsr; Password=abc.123";
 
             string query = "" +
-                "SELECT ors.id,cli.nomPrenom client,voiture.matricule voiture,dateDocument,dateCreation, ors.kilometrage, totalHt, totalTtc, resteAPaye " +
+                "SELECT ors.id,cli.nomPrenom client,voiture.matricule voiture,dateDocument,dateCreation, ors.kilometrage, totalHt, totalTtc, cli.solde resteAPaye " +
                 "FROM OrdreDeReparation ors "+
                 "LEFT JOIN Client cli on   ors.client = cli.id " +
                 "LEFT JOIN Voiture voiture ON ORS.voiture = VOITURE.id " +
